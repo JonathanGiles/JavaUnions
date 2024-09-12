@@ -37,6 +37,19 @@ public class ModelType {
     public static void main(String[] args) {
         ModelType modelType = new ModelType();
         modelType.setProp1(23);
+
+        // we can just call the getValue(Class<T> cls) method to get the value as the type we expect it to be
         System.out.println(modelType.getProp1().getValue(Integer.class));
+
+        // or we can use the tryConsume method
+        modelType.getProp1().tryConsume(v -> System.out.println("Value from lambda: " + v), Integer.class);
+
+        // or we can write a switch expression
+        switch (modelType.getProp1().getValue()) {
+            case String s -> System.out.println("String value from switch: " + s);
+            case Integer i -> System.out.println("Integer value from switch: " + i);
+            case Double d -> System.out.println("Double value from switch: " + d);
+            default -> throw new IllegalArgumentException("Unknown type: " + modelType.getProp1().getType().getTypeName());
+        }
     }
 }
